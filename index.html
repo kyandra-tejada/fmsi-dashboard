@@ -1054,6 +1054,7 @@
           <button onclick="quickReplyActionItem()" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Request Action Item Update</button>
           <button onclick="quickReplyProject()" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Flag a Project Change</button>
           <button onclick="quickReply('General Question', 'Hi team, I have a question I\'d like some clarification on:\n\n[Describe your question here]')" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Ask a Question</button>
+          <button onclick="quickReplyNewTerm()" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Add New Term</button>
         </div>
       </div>
 
@@ -1073,6 +1074,7 @@
           <option value="" disabled selected>Select a topic...</option>
           <option value="Action Item">Action Item</option>
           <option value="Project">Project</option>
+          <option value="New Term">New Term</option>
           <option value="General Question">General Question</option>
         </select>
       </div>
@@ -1092,6 +1094,7 @@
   const placeholders = {
     'Action Item': 'e.g. Please mark Writebacks as Closed, update the next steps for List of Terms, or add a new action item for...',
     'Project': 'e.g. The Pre-Renewal Campaign go-live date has shifted, or I have feedback on the campaign structure...',
+    'New Term': 'e.g. Term: [term name]\nDefinition: [how should this term be defined]',
     'General Question': 'e.g. Can you clarify what the current status of the testing audience means, or when our next Monday call is?'
   };
 
@@ -1125,6 +1128,13 @@
   function quickReplyQuestion() {
     document.getElementById('cf-topic').value = 'General Question';
     document.getElementById('cf-message').value = 'Hi team, I have a question I\'d like some clarification on:\n\n[Describe your question here]';
+    updateMessagePlaceholder();
+    document.getElementById('cf-name').focus();
+  }
+
+  function quickReplyNewTerm() {
+    document.getElementById('cf-topic').value = 'New Term';
+    document.getElementById('cf-message').value = 'Term: [term name]\nDefinition: [how should this term be defined]';
     updateMessagePlaceholder();
     document.getElementById('cf-name').focus();
   }
