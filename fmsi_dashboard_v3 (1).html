@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Dashboard — First MainStreet Insurance</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F0F0; color: #000; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .hd { background: #000; padding: 32px 44px 28px; }
+  .hd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #1e1e1e; }
+  .hd-brand { display: flex; align-items: center; gap: 10px; }
+  .hd-brand-mark { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+  .hd-brand-name { font-size: 11px; color: #444; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+  .hd-updated { font-size: 11px; color: #444; }
+  .hd-updated span { color: #878787; font-weight: 600; }
+  .hd-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 5px; }
+  .hd-title { font-size: 28px; font-weight: 800; color: #fff; }
+
+  /* ── TABS ── */
+  .tabs { background: #0a0a0a; display: flex; padding: 0 44px; border-bottom: 1px solid #1a1a1a; }
+  .tab { padding: 13px 18px; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: color .15s; white-space: nowrap; }
+  .tab:hover { color: #aaa; }
+  .tab.on { color: #fff; border-bottom-color: #E9A226; }
+  .tab.notes { color: #E9A226; margin-left: auto; }
+  .tab.notes:hover { color: #f0b84a; }
+
+  /* ── PAGE WRAPPER ── */
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 30px 22px 60px; }
+  .pg { display: none; }
+  .pg.on { display: block; }
+
+  /* ── STAT CARDS ── */
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
+  .stat { background: #fff; border-radius: 8px; padding: 18px 20px; border-left: 3px solid #E9A226; }
+  .stat.g { border-left-color: #32CD8D; }
+  .stat-label { font-size: 10px; font-weight: 700; color: #878787; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-val { font-size: 32px; font-weight: 800; line-height: 1; color: #000; }
+  .stat-sub { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+  /* ── CADENCE BLOCK ── */
+  .cadence { background: #000; border-radius: 10px; padding: 22px 26px; margin-bottom: 28px; display: flex; gap: 36px; align-items: stretch; }
+  .cad-item { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .cad-divider { width: 1px; background: #1e1e1e; }
+  .cad-eyebrow { font-size: 10px; font-weight: 700; color: #555; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 4px; }
+  .cad-title { font-size: 16px; font-weight: 700; color: #fff; }
+  .cad-detail { font-size: 12px; color: #555; margin-top: 3px; line-height: 1.4; }
+  .cad-pill { display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 10px; }
+  .cad-pill.orange { background: #E9A226; color: #5a3a00; }
+  .cad-pill.tbd { background: #1e1e1e; color: #555; }
+
+  /* ── SECTION HEAD ── */
+  .sh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .sh-bar { width: 3px; height: 18px; background: #E9A226; border-radius: 2px; }
+  .sh-title { font-size: 15px; font-weight: 700; }
+  .sh-aside { font-size: 11px; color: #aaa; margin-left: auto; }
+
+  /* ── TABLE ── */
+  .tbl { background: #fff; border-radius: 10px; overflow: hidden; }
+  .tbl-head { display: grid; grid-template-columns: 2fr 1fr 1fr 2.2fr; background: #000; padding: 10px 16px; gap: 12px; }
+  .tbl-hc { font-size: 10px; font-weight: 700; color: #555; letter-spacing: 1.2px; text-transform: uppercase; }
+  .tbl-row { display: grid; grid-template-columns: 2fr 1fr 1fr 2.2fr; padding: 14px 16px; gap: 12px; border-bottom: 1px solid #f4f4f4; align-items: start; }
+  .tbl-row:last-child { border-bottom: none; }
+  .tbl-row:hover { background: #fafafa; }
+  .row-name { font-size: 13px; font-weight: 600; color: #000; }
+  .row-type { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .row-ns { font-size: 12px; color: #555; line-height: 1.5; }
+
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+  .b-ip  { background:#DCFCE7; color:#166534; }
+  .b-cls { background:#D6FFF7; color:#00635A; }
+
+  .pri { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; }
+  .p-hi { background:#FFEBCA; color:#A6731B; }
+  .p-md { background:#F0F0F0; color:#555; }
+
+  /* closed items */
+  .closed-toggle { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 11px 16px; background: #fff; border-radius: 8px; border: 1px dashed #ddd; cursor: pointer; font-size: 13px; color: #aaa; font-weight: 500; }
+  .closed-toggle:hover { border-color: #bbb; color: #666; }
+  .closed-drawer { display: none; margin-top: 8px; }
+  .closed-drawer.open { display: block; }
+
+  /* ── PROJECT SECTION ── */
+  .proj-card { background: #fff; border-radius: 10px; overflow: hidden; }
+  .proj-hd { background: #000; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .proj-tag { font-size: 10px; font-weight: 700; color: #E9A226; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 5px; }
+  .proj-name { font-size: 20px; font-weight: 800; color: #fff; }
+  .proj-gl-label { font-size: 10px; font-weight: 600; color: #555; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; text-align: right; }
+  .proj-gl-date { font-size: 20px; font-weight: 800; color: #E9A226; }
+  .proj-body { padding: 22px 24px; }
+  .proj-desc { font-size: 13px; color: #555; line-height: 1.65; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+
+  /* progress bar */
+  .prog-label { font-size: 10px; font-weight: 700; color: #aaa; letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 12px; }
+  .prog-row { display: flex; align-items: center; }
+  .prog-step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .prog-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .prog-dot.done  { background: #32CD8D; }
+  .prog-dot.now   { background: #E9A226; }
+  .prog-dot.later { background: #ddd; }
+  .prog-step-lbl { font-size: 10px; text-align: center; max-width: 72px; line-height: 1.3; }
+  .prog-step-lbl.done  { color: #32CD8D; font-weight: 600; }
+  .prog-step-lbl.now   { color: #E9A226; font-weight: 600; }
+  .prog-step-lbl.later { color: #bbb; }
+  .prog-line { flex: 1; height: 2px; max-width: 50px; }
+  .prog-line.done  { background: #32CD8D; }
+  .prog-line.now   { background: #E9A226; }
+  .prog-line.later { background: #e0e0e0; }
+
+  /* resource links */
+  .res-label { font-size: 10px; font-weight: 700; color: #aaa; letter-spacing: 1.1px; text-transform: uppercase; margin-bottom: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .res-link { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #f8f8f8; border: 1px solid #ebebeb; border-radius: 8px; cursor: pointer; text-decoration: none; transition: background .12s; }
+  .res-link:hover { background: #f0f0f0; }
+  .res-icon { width: 36px; height: 36px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .ri-o { background: #FFF3DC; }
+  .ri-g { background: #EDFFF6; }
+  .ri-b { background: #EEF0FF; }
+  .ri-gr { background: #F0F0F0; }
+  .res-text { flex: 1; }
+  .res-title { font-size: 13px; font-weight: 700; color: #000; }
+  .res-desc  { font-size: 11px; color: #aaa; margin-top: 1px; }
+  .res-arrow { color: #ccc; font-size: 14px; }
+
+  /* ── INLINE PANELS ── */
+  .inline-panel { display: none; margin-top: 10px; background: #f8f8f8; border: 1px solid #ebebeb; border-radius: 8px; padding: 18px 20px; }
+  .inline-panel.open { display: block; }
+  .ip-title { font-size: 13px; font-weight: 700; color: #000; margin-bottom: 14px; }
+
+  .ip-list { display: flex; flex-direction: column; gap: 9px; }
+  .ip-item { display: flex; align-items: flex-start; gap: 10px; }
+  .ip-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .ip-dot.done { background: #32CD8D; color: #fff; }
+  .ip-dot.now  { background: #E9A226; color: #000; }
+  .ip-dot.todo { background: #e0e0e0; }
+  .ip-text { font-size: 13px; color: #333; line-height: 1.4; }
+  .ip-text.strikethrough { text-decoration: line-through; color: #aaa; }
+  .ip-text.muted { color: #aaa; }
+
+  .ip-table { border: 1px solid #e8e8e8; border-radius: 6px; overflow: hidden; }
+  .ip-thr { display: grid; grid-template-columns: 2.5fr 1fr 1fr; background: #000; padding: 9px 14px; gap: 10px; }
+  .ip-thc { font-size: 10px; font-weight: 700; color: #555; letter-spacing: 1.1px; text-transform: uppercase; }
+  .ip-tr { display: grid; grid-template-columns: 2.5fr 1fr 1fr; padding: 12px 14px; gap: 10px; border-bottom: 1px solid #f0f0f0; background: #fff; align-items: center; }
+  .ip-tr:last-child { border-bottom: none; }
+  .ip-td-main { font-size: 13px; font-weight: 500; color: #000; line-height: 1.4; }
+  .ip-td-owner { font-size: 12px; color: #555; }
+
+  .ip-ns-item { display: flex; gap: 14px; align-items: flex-start; }
+  .ip-ns-num { width: 24px; height: 24px; border-radius: 50%; background: #E9A226; color: #000; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .ip-ns-body { flex: 1; }
+  .ip-ns-main { font-size: 13px; font-weight: 700; color: #000; margin-bottom: 5px; }
+  .ip-ns-detail { font-size: 13px; color: #555; line-height: 1.6; }
+
+  /* ── INTERNAL PAGE ── */
+  .int-banner { background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .int-banner-icon { font-size: 14px; }
+  .int-banner-text { font-size: 12px; color: #555; }
+  .int-banner-text strong { color: #878787; }
+
+  .int-section { margin-bottom: 28px; }
+  .int-sh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .int-sh-bar { width: 3px; height: 18px; background: #555; border-radius: 2px; }
+  .int-sh-title { font-size: 15px; font-weight: 700; color: #000; }
+
+  .int-card { background: #fff; border-radius: 10px; padding: 20px 22px; margin-bottom: 10px; }
+  .int-card-title { font-size: 12px; font-weight: 700; color: #878787; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .int-body { font-size: 13px; color: #333; line-height: 1.7; }
+  .int-body strong { color: #000; }
+  .int-body a { color: #E9A226; }
+
+  .int-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+  .int-warn { background: #FFFBEB; border-left: 3px solid #E9A226; border-radius: 6px; padding: 12px 14px; margin-bottom: 8px; }
+  .int-warn-title { font-size: 12px; font-weight: 700; color: #A6731B; margin-bottom: 4px; }
+  .int-warn-text { font-size: 12px; color: #555; line-height: 1.6; }
+
+  .sow-table { background: #fff; border-radius: 10px; overflow: hidden; }
+  .sow-head { display: grid; grid-template-columns: 2fr 3fr 1fr; background: #000; padding: 10px 16px; gap: 12px; }
+  .sow-hc { font-size: 10px; font-weight: 700; color: #555; letter-spacing: 1.2px; text-transform: uppercase; }
+  .sow-row { display: grid; grid-template-columns: 2fr 3fr 1fr; padding: 14px 16px; gap: 12px; border-bottom: 1px solid #f4f4f4; align-items: start; }
+  .sow-row:last-child { border-bottom: none; }
+  .sow-name { font-size: 13px; font-weight: 600; color: #000; line-height: 1.4; }
+  .sow-desc { font-size: 12px; color: #555; line-height: 1.5; }
+  .sow-status { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; display: inline-block; }
+  .sow-pending  { background: #FEFCE8; color: #854D0E; }
+  .sow-progress { background: #C2D6FF; color: #004FDB; }
+  .sow-done     { background: #DCFCE7; color: #166534; }
+
+  /* ── MEETING NOTES ── */
+  .mn-intro { font-size: 13px; color: #666; background: #fff; border-radius: 8px; padding: 16px 18px; margin-bottom: 16px; line-height: 1.6; }
+  .mn-list { display: flex; flex-direction: column; gap: 8px; }
+  .mn-card { background: #fff; border-radius: 8px; overflow: hidden; }
+  .mn-hd { display: flex; align-items: center; gap: 10px; padding: 13px 16px; cursor: pointer; }
+  .mn-hd:hover { background: #fafafa; }
+  .mn-date { font-size: 13px; font-weight: 700; color: #000; }
+  .mn-type-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: .4px; text-transform: uppercase; }
+  .mt-ci { background: #C2D6FF; color: #004FDB; }
+  .mt-pr { background: #DCFCE7; color: #166534; }
+  .mn-chev { margin-left: auto; font-size: 11px; color: #ccc; transition: transform .18s; }
+  .mn-card.open .mn-chev { transform: rotate(180deg); }
+  .mn-body { display: none; padding: 0 16px 14px; border-top: 1px solid #f2f2f2; }
+  .mn-card.open .mn-body { display: block; padding-top: 12px; }
+  .mn-text { font-size: 13px; color: #444; line-height: 1.7; }
+  .mn-text strong { color: #000; }
+
+  /* ── FOOTER ── */
+  .ft { background: #000; padding: 18px 44px; display: flex; justify-content: space-between; }
+  .ft-l, .ft-r { font-size: 11px; color: #333; }
+  .ft-o { color: #E9A226; }
+
+  /* ── CONTACT MODAL ── */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+  .modal-box { background:#fff; border-radius:12px; width:100%; max-width:480px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+  .modal-header { background:#000; padding:20px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .modal-title { font-size:16px; font-weight:800; color:#fff; }
+  .modal-close { background:none; border:none; color:#555; font-size:20px; cursor:pointer; line-height:1; padding:0; }
+  .modal-close:hover { color:#fff; }
+  .modal-body { padding:24px; }
+  .modal-field { margin-bottom:16px; }
+  .modal-label { display:block; font-size:11px; font-weight:700; color:#878787; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .modal-input, .modal-select, .modal-textarea { width:100%; padding:10px 12px; border:1px solid #e0e0e0; border-radius:6px; font-size:13px; color:#000; font-family:inherit; background:#fff; outline:none; transition:border-color .15s; }
+  .modal-input:focus, .modal-select:focus, .modal-textarea:focus { border-color:#E9A226; }
+  .modal-textarea { resize:vertical; min-height:100px; }
+  .modal-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .modal-footer { padding:0 24px 24px; display:flex; gap:10px; }
+  .modal-btn-submit { flex:1; background:#E9A226; color:#000; border:none; padding:12px; border-radius:6px; font-size:13px; font-weight:800; cursor:pointer; letter-spacing:0.3px; }
+  .modal-btn-submit:hover { background:#f0b84a; }
+  .modal-btn-cancel { background:#f5f5f5; color:#555; border:none; padding:12px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+  .modal-btn-cancel:hover { background:#ebebeb; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-top">
+    <div class="hd-brand">
+      <span class="hd-brand-mark">AR</span>
+      <span class="hd-brand-name">Agency Revolution</span>
+    </div>
+    <span onclick="document.getElementById('contact-modal').style.display='flex'" style="cursor:pointer; background:#1a1a1a; color:#E9A226; font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:0.5px; border:1px solid #333; white-space:nowrap; display:inline-flex; align-items:center; gap:6px;">Contact Us</span>
+  
+  </div>
+  <div class="hd-eyebrow">Client Dashboard</div>
+  <div class="hd-title">First MainStreet Insurance</div>
+  <div style="display:flex; gap:8px; margin-top:10px;">
+    <div style="display:inline-block; background:#1a1a1a; color:#E9A226; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:0.5px;">Fuse</div>
+    <div style="display:inline-block; background:#1a1a1a; color:#E9A226; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:0.5px;">Attract</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab on" onclick="go('overview',this)">Overview</div>
+  <div class="tab" onclick="go('projects',this)">Projects</div>
+  <div class="tab" onclick="go('notes',this)">Meeting Notes</div>
+  <div class="tab" onclick="go('dict',this)">Data Dictionary</div>
+  <div class="tab" onclick="go('workspace',this)" style="margin-left:auto;">Workspace Setup</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══════════ OVERVIEW ══════════ -->
+  <div class="pg on" id="pg-overview">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Active Items</div>
+        <div class="stat-val">6</div>
+        <div class="stat-sub">Open across the account</div>
+      </div>
+      <div class="stat g">
+        <div class="stat-label">Closed Items</div>
+        <div class="stat-val">6</div>
+        <div class="stat-sub">Resolved to date</div>
+      </div>
+    </div>
+
+    <!-- MEETING CADENCE -->
+    <div class="sh"><div class="sh-bar"></div><div class="sh-title">Meeting Cadence</div></div>
+    <div class="cadence" style="margin-bottom:28px;">
+      <div class="cad-item">
+        <div class="cad-eyebrow">Weekly Call</div>
+        <div class="cad-title">Mondays</div>
+        <div class="cad-detail">Full account check-in</div>
+        <div class="cad-pill orange">Every week</div>
+      </div>
+    </div>
+
+    <!-- ACTIVE ITEMS -->
+    <div style="margin-bottom:28px;">
+      <div class="sh"><div class="sh-bar"></div><div class="sh-title">Active Items</div><div class="sh-aside">6 open</div></div>
+      <div class="tbl">
+        <div class="tbl-head">
+          <div class="tbl-hc">Item</div>
+          <div class="tbl-hc">Status</div>
+          <div class="tbl-hc">Priority</div>
+          <div class="tbl-hc">Next Steps</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Writebacks</div><div class="row-type">Technical Integration</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-hi">High</div></div>
+          <div class="row-ns">Kaleb &amp; Terrance coordinating with Applied. Update to follow once confirmed.</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Pre-Renewal Campaign</div><div class="row-type">Campaign</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-hi">High</div></div>
+          <div class="row-ns">FMSI reviewing campaign doc and providing feedback on Commercial, Farm, and Personal structure.</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Test Cases</div><div class="row-type">QA</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-hi">High</div></div>
+          <div class="row-ns">FMG/AR has taken the test cases for review to discuss best practices to share with FMSI.</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Strategic Meeting</div><div class="row-type">Internal</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-md">Medium</div></div>
+          <div class="row-ns">Sarah O'Toole scheduling strategic account review with Jason, Megan, and Lauren.</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Blacklisted Contact Cleanup</div><div class="row-type">Technical</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-md">Medium</div></div>
+          <div class="row-ns">Engineering ticket submitted. Update to be shared once resolved.</div>
+        </div>
+
+        <div class="tbl-row">
+          <div><div class="row-name">Check-In Meetings</div><div class="row-type">Process</div></div>
+          <div><div class="badge b-ip">In Progress</div></div>
+          <div><div class="pri p-md">Medium</div></div>
+          <div class="row-ns">Weekly Thursday check-ins established. First scheduled July 9 at 9 AM CST.</div>
+        </div>
+      </div>
+
+      <!-- CLOSED ITEMS -->
+      <div class="closed-toggle" onclick="toggleClosed(this)">
+        <span class="toggle-arrow">▸</span>
+        <span>Show closed items (6)</span>
+      </div>
+      <div class="closed-drawer">
+        <div class="tbl">
+          <div class="tbl-head">
+            <div class="tbl-hc">Item</div>
+            <div class="tbl-hc">Status</div>
+            <div class="tbl-hc">Priority</div>
+            <div class="tbl-hc">Notes</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">List of Terms</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-hi">High</div></div>
+            <div class="row-ns">Initial terms defined on dashboard. Ongoing as new terms are identified.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">Prevent Opt-Outs on Account Notices</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-hi">High</div></div>
+            <div class="row-ns">Resolved and deployed.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">Epic API Suite Writebacks Phase 1</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-hi">High</div></div>
+            <div class="row-ns">Phase 1 complete. Phase 2 in progress.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">Email Preview PDF Attachments Phase 2</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-md">Medium</div></div>
+            <div class="row-ns">Completed and confirmed by FMSI.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">One Subscriber per Policy Location</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-hi">High</div></div>
+            <div class="row-ns">Phase 2 complete — FMSI can now send per policy location.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">Chronological Policy Order</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-md">Medium</div></div>
+            <div class="row-ns">Policies now displayed in chronological order.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /overview -->
+
+
+  <!-- ══════════ PROJECTS ══════════ -->
+  <div class="pg" id="pg-projects">
+
+    <div class="sh" style="margin-bottom:14px;"><div class="sh-bar"></div><div class="sh-title">Active Projects</div><div class="sh-aside">1 active</div></div>
+
+    <div class="proj-card">
+      <div class="proj-hd">
+        <div>
+          <div class="proj-tag">Active Project</div>
+          <div class="proj-name">Pre-Renewal Campaign</div>
+        </div>
+        <div>
+          <div class="proj-gl-label">Go-Live Target</div>
+          <div class="proj-gl-date">August 10, 2026</div>
+        </div>
+      </div>
+
+      <div class="proj-body">
+        <div class="proj-desc">
+          Launching a pre-renewal campaign across three business segments — Commercial, Farm, and Personal.
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="prog-label">Progress</div>
+        <div class="prog-row">
+          <div class="prog-step">
+            <div class="prog-dot done"></div>
+            <div class="prog-step-lbl done">Pre-Renewal Doc Shared with FMSI</div>
+          </div>
+          <div class="prog-line done"></div>
+          <div class="prog-step">
+            <div class="prog-dot done"></div>
+            <div class="prog-step-lbl done">FMSI Feedback</div>
+          </div>
+          <div class="prog-line now"></div>
+          <div class="prog-step">
+            <div class="prog-dot now"></div>
+            <div class="prog-step-lbl now">Aligning Campaigns</div>
+          </div>
+          <div class="prog-line later"></div>
+          <div class="prog-step">
+            <div class="prog-dot later"></div>
+            <div class="prog-step-lbl later">Testing Audience</div>
+          </div>
+          <div class="prog-line later"></div>
+          <div class="prog-step">
+            <div class="prog-dot later"></div>
+            <div class="prog-step-lbl later">Final Requirements</div>
+          </div>
+          <div class="prog-line later"></div>
+          <div class="prog-step">
+            <div class="prog-dot later"></div>
+            <div class="prog-step-lbl later">Go-Live</div>
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="res-label">Resources &amp; References</div>
+        <div class="res-grid">
+
+          <div class="res-link" id="tile-doc" onclick="showBottomPanel('panel-doc','tile-doc')">
+            <div class="res-icon ri-o">📄</div>
+            <div class="res-text">
+              <div class="res-title">Pre-Renewal Campaign Doc</div>
+              <div class="res-desc">Campaign overview &amp; structure</div>
+            </div>
+            <div class="res-arrow">▾</div>
+          </div>
+
+          <div class="res-link" id="tile-checklist" onclick="showBottomPanel('panel-checklist','tile-checklist')">
+            <div class="res-icon ri-g">✅</div>
+            <div class="res-text">
+              <div class="res-title">Go-Live Checklist</div>
+              <div class="res-desc">Tasks &amp; milestones before launch</div>
+            </div>
+            <div class="res-arrow">▾</div>
+          </div>
+
+          <div class="res-link" id="tile-actions" onclick="showBottomPanel('panel-actions','tile-actions')">
+            <div class="res-icon ri-b">📋</div>
+            <div class="res-text">
+              <div class="res-title">Action Items</div>
+              <div class="res-desc">Pre-Renewal specific items</div>
+            </div>
+            <div class="res-arrow">▾</div>
+          </div>
+
+          <div class="res-link" id="tile-nextsteps" onclick="showBottomPanel('panel-nextsteps','tile-nextsteps')">
+            <div class="res-icon ri-gr">🗂️</div>
+            <div class="res-text">
+              <div class="res-title">Next Steps</div>
+              <div class="res-desc">What needs to happen now</div>
+            </div>
+            <div class="res-arrow">▾</div>
+          </div>
+
+        </div>
+
+        <!-- PRE-RENEWAL DOC PANEL -->
+        <div class="inline-panel" id="panel-doc">
+          <div class="ip-title">Pre-Renewal Campaign Doc</div>
+          <div style="font-size:13px; color:#555; line-height:1.6; margin-bottom:14px;">This document outlines the pre-renewal campaign structure shared with FMSI for review. It covers campaign goals, segment setup (Commercial, Farm, Personal), and sending logic. FMSI's feedback on this document is the current priority before we can move forward.</div>
+          <a href="https://docs.google.com/document/d/1P29EFjeyDtmqSinK2yKBmtCYgEfmIs1A4sIMnHRsMBw/edit?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#E9A226;color:#000;font-size:12px;font-weight:700;padding:9px 16px;border-radius:6px;text-decoration:none;">Open Document ↗</a>
+        </div>
+
+        <!-- GO-LIVE CHECKLIST PANEL -->
+        <div class="inline-panel" id="panel-checklist">
+          <div class="ip-title">Go-Live Checklist</div>
+          <div class="ip-list">
+            <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">Campaign structure aligned (Commercial, Farm, Personal)</div></div>
+            <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">Business segments confirmed per account, per policy location</div></div>
+            <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">FMSI feedback received on Pre-Renewal Campaign doc</div></div>
+            <div class="ip-item"><div class="ip-dot now">→</div><div class="ip-text">Align on test cases with FMSI</div></div>
+            <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Testing audience defined for pre-renewal campaign</div></div>
+            <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Final campaign requirements finalized</div></div>
+            <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Go-Live — August 10, 2026</div></div>
+          </div>
+        </div>
+
+        <!-- ACTION ITEMS PANEL -->
+        <div class="inline-panel" id="panel-actions">
+          <div class="ip-title">Pre-Renewal Action Items</div>
+          <div class="ip-table">
+            <div class="ip-thr">
+              <div class="ip-thc">Item</div>
+              <div class="ip-thc">Status</div>
+              <div class="ip-thc">Owner</div>
+            </div>
+            <div class="ip-tr">
+              <div class="ip-td-main">FMSI feedback on Pre-Renewal Campaign doc</div>
+              <div><div class="badge b-cls">Closed</div></div>
+              <div class="ip-td-owner">FMSI</div>
+            </div>
+            <div class="ip-tr">
+              <div class="ip-td-main">Getting Feedback on Test Cases</div>
+              <div><div class="badge b-ip">In Progress</div></div>
+              <div class="ip-td-owner">FMG/AR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEXT STEPS PANEL -->
+        <div class="inline-panel" id="panel-nextsteps">
+          <div class="ip-title">Next Steps</div>
+          <div class="ip-ns-item">
+            <div class="ip-ns-num">1</div>
+            <div class="ip-ns-body">
+              <div class="ip-ns-main">FMG/AR reviewing test cases against best practices</div>
+              <div class="ip-ns-detail">Agency Revolution has taken the test cases for review to discuss best practices to share with FMSI. Once those details have been finalized, a check-in meeting will be scheduled to align on approach and timeline.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mn-card" id="m-apr13">
+        <div class="mn-hd" onclick="toggleMN('m-apr13')">
+          <div class="mn-date">April 13, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Pre-Renewal Campaign</strong> — The engineers provided an estimate on the work this will take and shared it with our Product Leaders, who will determine how this can be tackled. There isn't an ETA yet, but it seems like the team is moving forward with this. FMSI would like a better understanding of the root cause. They will discuss internally, and we will connect with our team to see if there is anything we can identify on our end that could point to a root cause, apart from the carrier submitting renewals earlier than the 60-day window currently in place for the email. FMSI will share any information on this once they discuss. We are connecting with the team to see if there is an ETA that can be shared on getting the policy box to display chronologically, as that will address a significant issue until the other items can be sorted.<br><br>
+            <strong>Active Definition</strong> — Kaleb will send over more information on the definition currently in place for FMSI regarding an active policy, as there may be some discrepancies in how it's being interpreted in Fuse.<br><br>
+            <strong>Remove Outbox for Post Renewal</strong> — FMSI will discuss if they'd like to remove the Outbox for the Post Renewal Campaigns and will let our team know.<br><br>
+            <strong>Same Policy Number</strong> — The team is looking into this more. We will share an update once we have details.<br><br>
+            <strong>Content Library</strong> — Lauren was unable to view content in the Content Library. This was escalated and the team confirmed this to be a bug. We will keep FMSI updated once there's been a fix.<br><br>
+            <strong>Dashes for Phone Numbers</strong> — The team provided an update that there could be movement on this ticket this week.<br><br>
+            <strong>Producer Email</strong> — We set up a Broadcast for the McFadden branch which is ready to be launched.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-apr6">
+        <div class="mn-hd" onclick="toggleMN('m-apr6')">
+          <div class="mn-date">April 6, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Pre-Renewal Campaign</strong> — FMSI has inquired about the possibility of removing the renewal date for policies to avoid confusion for clients who see a 2027 renewal date. We will see what can be done within the platform, but if there isn't a way to update this, we will submit a Canny request to add the option to filter the renewal date in the policy box component in the email.<br><br>
+            <strong>Same Policy Number</strong> — There are clients who have the same policy number for two different instances, which is creating confusion within Fuse. Fuse is reading this as one policy because it's the same policy number. Our team will connect and see if there are any adjustments that can be made within Epic BDE/Fuse.<br><br>
+            <strong>Renewal Date Order</strong> — FMSI would like the renewal dates to be in chronological order, with the policy with the highest premium listed first, as this is what the campaign is based on. We will check how the renewal dates are coming in from Epic and see if adjustments can be made.<br><br>
+            <strong>NPS Campaign</strong> — The next campaign for FMSI is the NPS Campaign.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-mar30">
+        <div class="mn-hd" onclick="toggleMN('m-mar30')">
+          <div class="mn-date">March 30, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phone Numbers (Dashes)</strong> — The team may be able to complete this by mid-April, but this is a rough ETA. Once they have something more concrete to share, we will provide details in the email thread.<br><br>
+            <strong>Internal Communication (Unable to Email)</strong> — We will follow up with our team and let them know that FMSI doesn't want to be limited to just sending based on the policy with the highest premium. For example, if the campaign is referring to home policies, they'd want it to be based on that, even if that policy isn't the highest premium. They want it to be specific to the policy they are targeting for any policy-level campaign.<br><br>
+            <strong>Pre/Post-Renewal Campaign</strong> — FMSI will get confirmation from their team on whether the DNM rule should be included in the audience for both pre-renewal and post-renewal campaigns, and when the email should be sent out for the post-renewal campaign, which is currently set to send 7 days post-renewal. In the meantime, we will work on adding the specific policy types to the audience.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-mar23">
+        <div class="mn-hd" onclick="toggleMN('m-mar23')">
+          <div class="mn-date">March 23, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Internal Communication</strong> — A PDF was sent outlining last week's call discussing the expectations for internal communications. As a temporary fix, internal communications will be sent from the Account Rep.<br><br>
+            <strong>Phone Numbers (Dashes)</strong> — This request has been reopened with our team. Once there's more information, we will share those details.<br><br>
+            <strong>Policy Rule Box</strong> — Lauren will be sending over the list of policy types that should be included in the preview box in the pre-renewal emails.<br><br>
+            <strong>Segment Rule</strong> — The segment rule 'email is not empty' will remain unless FMSI decides otherwise.<br><br>
+            <strong>Internal Email Verbiage</strong> — FMSI will work on updating the internal email being sent to the account rep.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-mar16">
+        <div class="mn-hd" onclick="toggleMN('m-mar16')">
+          <div class="mn-date">March 16, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Pre-Renewal Campaigns</strong> — We reviewed the pre-renewal campaigns for Commercial, Personal, and Farm. These will be sent per account, per policy location. FMSI is meeting internally to discuss the following: which policy types should be included in the policy preview box for the three campaigns, whether accounts with no email should be included in the campaign, and when they are able to meet with the AR Product Team to go over expectations for internal emails.<br><br>
+            <strong>Meeting with Product</strong> — FMSI will discuss internally when everyone is available to meet this week and will follow up.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-mar9">
+        <div class="mn-hd" onclick="toggleMN('m-mar9')">
+          <div class="mn-date">March 9, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Writebacks</strong> — Kaleb and Terrance are waiting on Applied to get this going. Once there are more details to share, they will be in touch.<br><br>
+            <strong>Renewal Campaign</strong> — FMSI would like to begin launching a renewal campaign for Commercial, Personal, and Farm. They will start with a beta audience of 5-6 agencies on March 30th, and then, after two weeks, release it to all applicable audience members on April 13th. The campaign will be sent from the Policy Account Manager, to whom the form responses should be directed, and will also be sent to the primary contact. We will use ADC for segmentation, using the 'FMSI PL Tier X.' In addition, they would like to include pre and post-renewal thank yous. Lauren and Ky will work on drafting this to then share with everyone else.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-feb23">
+        <div class="mn-hd" onclick="toggleMN('m-feb23')">
+          <div class="mn-date">February 23, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>PL Birthday Campaign</strong> — We went ahead and launched the PL Birthday Campaign to primary contacts. We added rules to ensure accounts have an email address on file along with a birthday—see the scheduled steps here.<br><br>
+            <strong>Writebacks</strong> — Kaleb is in contact with Chad about the possibility of having attachments available without enabling activity writebacks. Our team will share details on whether this is possible.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-feb9">
+        <div class="mn-hd" onclick="toggleMN('m-feb9')">
+          <div class="mn-date">February 9, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Contact-level DNM</strong> — This is now available, and we will add it to all segments in existing campaigns for FMSI at the account level (primary contact). The DNM will then be removed from the workspace, and an engineering ticket will be submitted to remove those that are currently blacklisted on our end.<br><br>
+            <strong>PL Birthday</strong> — The content is ready, and the audience has been finalized. Our Engineers are working on enabling the ability to send 'per policy location,' as this isn't currently an option. This is a top priority, and we hope to have an ETA to share soon.<br><br>
+            <strong>Next Week's Meeting</strong> — Next week's meeting has been canceled since our team will be out of the office in observance of President's Day. However, if any assistance is needed, we can schedule a time to connect!
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-feb2">
+        <div class="mn-hd" onclick="toggleMN('m-feb2')">
+          <div class="mn-date">February 2, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phase 2</strong> — Phase 2 is now complete, and FMSI is able to send 'per policy location.' As a reminder, for the time being, the team suggests ensuring that the cadence of the email (At Launch, Ongoing, or In The Future) is selected so the system doesn't revert back to sending as 'per account.' This is recommended until the team is able to resolve that issue.<br><br>
+            <strong>DNM</strong> — The email blacklist rule will be removed from your workspace, and we will continue to use the workaround presented, which involves adding a rule to the segments being used in campaigns: Marketing Delivery Code is not D. We are connecting with the team on segmenting this at the contact level, as we weren't able to find this data field during the call.<br><br>
+            <strong>Phone Number Dashes</strong> — Currently, dashes are appearing in Fuse for the phone numbers of employees. Our team will look into implementing a code for the employee/user integration to resolve this issue. We will share more details once we have further information.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-jan20">
+        <div class="mn-hd" onclick="toggleMN('m-jan20')">
+          <div class="mn-date">January 20, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phase 2</strong> — This is currently in the testing phase. The team is still working through an aspect of Phase 2 that has created an unexpected complication, specifically the ability to support emails being sent from the policy-level role instead of the account-level. During this time, we will send weekly updates on Wednesday/Thursday to keep everyone up to date.<br><br>
+            <strong>DNM</strong> — We are getting confirmation that if a secondary contact is selected as DNM, it only affects that email and not the whole account. The team is currently testing this. We are also checking if we can pull a report of accounts (both primary and secondary, if possible) that have DNM. We will follow up via email in the thread where this was requested.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-jan12">
+        <div class="mn-hd" onclick="toggleMN('m-jan12')">
+          <div class="mn-date">January 12, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phase 2</strong> — This is currently under product review and testing. There is no solid ETA yet, but we will connect with the team to get a status update by Wednesday or Thursday.<br><br>
+            <strong>NYE Holiday Campaign</strong> — This campaign has been launched and will be sent on Tuesday, January 13th.<br><br>
+            <strong>DNM</strong> — FMSI is going to discuss this internally and will most likely be sending a batch of around 7,000 accounts over to our team regarding the DNM discussion.<br><br>
+            <strong>Next Monday's Meeting</strong> — Both teams will be out of the office in observance of MLK Day and have rescheduled next Monday's meeting to Tuesday, at the same time.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-jan5">
+        <div class="mn-hd" onclick="toggleMN('m-jan5')">
+          <div class="mn-date">January 5, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phase 2</strong> — This is currently under product review and testing. There is no solid ETA as of yet, but once we have any new information, we will share those details.<br><br>
+            <strong>Pre-Renewal Campaigns</strong> — The goal is to have beta policies to test things out, but this is being discussed internally with FMSI and may be pushed until the end of March.<br><br>
+            <strong>NYE Holiday Campaign</strong> — The goal FMSI is envisioning isn't currently available in Phase 1, but will be available in Phase 2. Since there is no ETA on Phase 2, we will push this out to next Monday to either review Phase 2 or just launch at the account level.<br><br>
+            <strong>Test Account</strong> — Our team has identified an issue with the test customer policies in Epic. Currently, all the policies have the same policy number "TEST," which is causing our system to interpret them as the same policy and map them to the same location. To facilitate more accurate testing, it would be helpful if the policies could be updated with different policy numbers, such as TEST1, TEST2, and TEST3. This has been updated and should reflect by tomorrow.<br><br>
+            <strong>Internal Stats of Unable to Email</strong> — After connecting with the team they made us aware this isn't a current functionality because it would alter the overall email stats. Internal emails generally have a 100% delivery success rate and high open rates due to their role in internal processes. Including them in metric tracking would skew the results, making it harder to evaluate the success of external customer communications. While there has been some interest in internal email metrics, it hasn't been prioritized for development.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-dec22">
+        <div class="mn-hd" onclick="toggleMN('m-dec22')">
+          <div class="mn-date">December 22, 2025 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Phase 1</strong> — Phase 1 is now ready! With this phase, we can send email communications at the policy level with the corresponding branding of each policy. This is aimed at policy-specific campaigns with policy-specific triggers.<br><br>
+            <strong>Phase 2</strong> — The ETA for testing to begin for Phase 2 is January 7th. Once testing is complete and the team gives the okay, we will share a confirmed ETA on when this phase will be released and ready for use. With Phase 2, we will have the ability to see the policy branches associated with the account on the left-hand side, and in the 'policies' tab, there will be a separate column to show which branch is associated with which account, including the details that have been previously shared.<br><br>
+            <strong>Pre-Renewal Campaigns</strong> — The FMSI team will share which policies they'd like to target as their beta group for Phase 1. Once those details are shared, we can ensure the audience is correct, enabling the Outbox so FMSI can monitor to confirm things are working correctly.<br><br>
+            <strong>Email Categories</strong> — The FMSI team is curious about how email categories are categorized in Fuse. When creating a campaign, the category will be displayed in the top left corner. The system will automatically categorize the emails. Fuse categorizes emails automatically to allow recipients to personalize their subscription preferences. The categories used by Fuse include: Account Notices (emails related to account activities or notifications), Marketing (emails intended to promote products or services), Newsletters (regularly distributed emails that provide news or updates).<br><br>
+            <strong>NYE Holiday Campaign</strong> — FMSI would like to launch a NYE email on January 6th. Once we have details on which policies this will be targeting, we can work with the team to see if this is something that can be accomplished in Phase 1.<br><br>
+            <strong>"Do Not Market"</strong> — FMSI brought up a concern where there are emails marked as "Do Not Market" from previous inactive accounts, which are affecting the current active client numbers. This is something we will have to take back to our team to see if there is anything that can be done now, or if this will require a custom request.<br><br>
+            <strong>Withdrawn List</strong> — FMSI has a list of accounts that are marked as 'withdrawn', but don't have the marketing code 'D' in Epic. FMSI will send a list for us to review, as some of these accounts could be marked as 'withdrawn' from either unsubscribing from a Fuse email or being manually opted out.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-dec8">
+        <div class="mn-hd" onclick="toggleMN('m-dec8')">
+          <div class="mn-date">December 8, 2025 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Product Update</strong> — Our Product Team has informed us that there will be two phases, and communication should be on its way to FMSI leadership from Jason Walker with all the details and timelines. Phase 1 will launch the CL & PL Pre and Post Renewal Campaigns. The goal is to have this completed and reviewed by December 19th—this is a rough ETA, but we're hopeful it will be done before we leave for break on December 23rd. Phase 2 will address the need to send emails once per branch location. When an ETA is available, we will share those details. This is a top priority for our team and is the main focus of our efforts.<br><br>
+            <strong>What our team needs from FMSI:</strong> For the internal campaign, FMSI would like for each branch to be notified. We will pass this information over to our team. FMSI will get those test accounts added this week and will share the details. Confirm verbiage for opt-out messaging. This should be resolved with the current fix being implemented so the verbiage isn't misleading.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-dec1">
+        <div class="mn-hd" onclick="toggleMN('m-dec1')">
+          <div class="mn-date">December 1, 2025 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Product Update</strong> — An update from our Product Team was shared before the Thanksgiving break. FMSI was able to review it, and everything looks good.<br><br>
+            <strong>Forms in Campaigns</strong> — Lauren posed the question of whether adding a form is possible in campaigns, and it is! Forms are customizable and can be added to emails in the form of a button, which will direct clients to fill out the custom form. Entries can be sent to either the Account Manager, Account Producer, or anyone on the team.<br><br>
+            <strong>Meeting Frequency</strong> — It was proposed to make the meetings a monthly occurrence, similar to other Enterprise clients. However, given the current workload, there is some hesitation, so a bi-weekly approach may be best. We will discuss this further when the whole team is present at the next meeting.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-oct1">
+        <div class="mn-hd" onclick="toggleMN('m-oct1')">
+          <div class="mn-date">October 1, 2025 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Personal Welcome Kit (New Bound)</strong> — Megan encountered a situation where a client's policy was bound in August, but the effective date wasn't until today, October 1 and an email was sent from this campaign. The idea for the personal welcome kit is for the client to receive the welcome email once the policy is bound. We went ahead and made those adjustments to the new cloned campaign and archived the old one so the email stats are still visible. This campaign will now run off the New Bound Customer Trigger.<br><br>
+            <strong>Unable to Email Campaign (Personal)</strong> — The existing unable-to-email campaign is supposed to be based on the personal welcome kit campaign. This was running for all those who have no email address on file but trigger the New Customer Event. We've updated the audience to target those who are personal with specific policy types that Megan will confirm, and we will update it so it reflects the Personal Welcome Kit.<br><br>
+            <strong>Personal Policy Types</strong> — The personal welcome kit is currently running based on personal policy types; however, Megan noticed there are a few missing. We will share the list of the policy types currently in the segment so Megan can follow up on any updates needed.<br><br>
+            <strong>Beta Campaign</strong> — We created a beta campaign targeting Fairfield, Hagge, and McCarton, as well as those who have a Commercial client type. This campaign will tag accounts with the 'Beta Campaign' tag (where the personal welcome kit is excluding those with that tag so clients aren't entered into two different campaigns). The team confirmed the audience looks good, and we are all set here.<br><br>
+            <strong>Unable to Email Campaign (Beta Campaign)</strong> — Similar to the unable-to-email campaign for the personal welcome kit, we will be creating and launching one to reflect the beta campaign for those who don't have an email address on file. Once this is complete, it will be sent for review.<br><br>
+            <strong>MFA/Campaign Edits Escalation</strong> — The issue with the MFA delay, along with being logged out when going to edit emails (aside from the internal unable-to-email campaign), has been escalated, and our Product and Engineering teams are looking into it. We will continue to share updates as we receive them.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-sep29">
+        <div class="mn-hd" onclick="toggleMN('m-sep29')">
+          <div class="mn-date">September 29, 2025 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Target vs. Delivered List</strong> — Lauren noticed that the number under Marketing Analytics showed a different number of those targeted compared to those delivered. An account example is Stacia Ward, who has an email address on file. We will add this to the current escalation and will share what we are able to find.<br><br>
+            <strong>Unable to Email Campaign</strong> — There were concerns about not seeing the email metrics for internal campaigns. However, after some discussion, it's been decided that a general email address will be created to act as the default user and will also receive a third alert if an email address is not updated in the system. Once this email address is set up, the team at First MainStreet will let us know so we can add that additional step and adjust the default user.<br><br>
+            <strong>Policy Branches</strong> — Clients with First MainStreet have policy branches and should essentially receive any policy-related information from those respective branches. At this time, Fuse only recognizes the account branch. It's recommended that we begin the conversation with our Product Team, who will be able to provide details on a timeline, costs, and any additional information to see if this is something First MainStreet would like to pursue.<br><br>
+            <strong>Beta Campaign</strong> — The goal is to have a generic welcome campaign, but first, the team at First MainStreet would like to ensure it's working as expected. Since there is a current Personal Welcome Kit and a concern that clients who trigger the 'New Customer' event in the future will receive both email campaigns, we will add a tagging step to one where it excludes the tag in the other to prevent a client from receiving both email campaigns. We will draft things and then have the team approve that it works as intended.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /notes -->
+
+  <!-- ══════════ DATA DICTIONARY ══════════ -->
+  <div class="pg" id="pg-dict">
+
+    <div style="background:#fff; border-radius:10px; padding:16px 20px; margin-bottom:16px; font-size:13px; color:#555; line-height:1.6;">
+      A shared reference of key terms used. Terms are defined here to ensure alignment between both teams. FMSI will flag terms they need defined and our team will populate the definitions.
+    </div>
+
+    <div style="background:#fff; border-radius:10px; overflow:hidden;">
+      <div style="display:grid; grid-template-columns:1fr 2fr; background:#000; padding:11px 18px; gap:14px;">
+        <div style="font-size:10px; font-weight:700; color:#555; letter-spacing:1.2px; text-transform:uppercase;">Term</div>
+        <div style="font-size:10px; font-weight:700; color:#555; letter-spacing:1.2px; text-transform:uppercase;">Definition</div>
+        
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 2fr; padding:14px 18px; gap:14px; border-bottom:1px solid #f4f4f4; align-items:start;">
+        <div style="font-size:13px; font-weight:700; color:#000;">Policy Premium</div>
+        <div style="font-size:13px; color:#555; line-height:1.5;">The dollar amount charged for the insurance policy for the selected term. Typically reflects the policy's written premium (before or after discounts/fees depending on the data source) and may be shown as annual premium or the full term premium.</div>
+        
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 2fr; padding:14px 18px; gap:14px; border-bottom:1px solid #f4f4f4; align-items:start;">
+        <div style="font-size:13px; font-weight:700; color:#000;">Next Renewal Date</div>
+        <div style="font-size:13px; color:#555; line-height:1.5;">The date the policy is scheduled to renew next (i.e., the start date of the next policy term). Commonly aligns with the current policy expiration date (or the effective date of the renewal term, depending on how your agency management system reports it).</div>
+        
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 2fr; padding:14px 18px; gap:14px; align-items:start; background:#fafafa;">
+        <div style="font-size:13px; color:#aaa; font-style:italic;">Need a term defined?</div>
+        <div style="font-size:13px; color:#aaa;">Use the <span style="cursor:pointer; color:#E9A226; font-weight:600;" onclick="document.getElementById('contact-modal').style.display='flex'">Contact Us</span> button to request a new term, and our team will populate the definition.</div>
+        
+      </div>
+    </div>
+
+  </div><!-- /dict -->
+
+  <!-- ══════════ WORKSPACE SETUP ══════════ -->
+  <div class="pg" id="pg-workspace">
+
+    <div style="background:#fff; border-radius:10px; padding:16px 20px; margin-bottom:16px; font-size:13px; color:#555; line-height:1.6;">
+      An overview of your workspace configuration, including policy status code mappings and active rules. <strong style="color:#000;">Cancellation behavior is considered cancelled effective until expiration date.</strong>
+    </div>
+
+    <div class="sh" style="margin-bottom:14px;"><div class="sh-bar"></div><div class="sh-title">Policy &amp; Line Status Mapping</div></div>
+
+    <div class="tbl" style="display:grid; grid-template-columns: 1fr 1.5fr 1.5fr;">
+      <div class="tbl-head" style="display: contents;">
+        <div style="font-size:10px; font-weight:700; color:#555; letter-spacing:1.2px; text-transform:uppercase; padding:11px 16px; background:#000;">Policy Status Code</div>
+        <div style="font-size:10px; font-weight:700; color:#555; letter-spacing:1.2px; text-transform:uppercase; padding:11px 16px; background:#000;">How We Use It</div>
+        <div style="font-size:10px; font-weight:700; color:#555; letter-spacing:1.2px; text-transform:uppercase; padding:11px 16px; background:#000;">Fuse Mapping</div>
+      </div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">APP</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Inactive Status Code</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Do Not Map</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">CAA</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Lost to Another Agency (Not AOR)</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Canceled</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">CAC</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Out of Biz/Sold/Not Needed</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Canceled</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">CAL</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Lost by AOR</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Canceled</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">CAR</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Coverage Rewritten</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Active</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">NNR</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">New – Non Renew – Bonds and Benefits</div>
+      <div style="font-size:13px; color:#aaa; font-style:italic; padding:14px 16px; border-bottom:1px solid #f4f4f4;">New</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">PUR</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Purchased Business</div>
+      <div style="font-size:13px; color:#aaa; font-style:italic; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Not actively used on FMSI side</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px; border-bottom:1px solid #f4f4f4;">QUT</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Quoting Renewal</div>
+      <div style="font-size:13px; color:#aaa; font-style:italic; padding:14px 16px; border-bottom:1px solid #f4f4f4;">Unsure on this</div>
+
+      <div style="font-size:13px; font-weight:700; color:#000; padding:14px 16px;">SOL</div>
+      <div style="font-size:13px; color:#555; padding:14px 16px;">Sold Business</div>
+      <div style="font-size:13px; color:#aaa; font-style:italic; padding:14px 16px;">Not actively used on FMSI side</div>
+
+    </div>
+
+  </div><!-- /workspace -->
+  <div class="pg" id="pg-contact">
+
+    <div style="max-width:560px; margin:0 auto; padding:20px 0;">
+
+      <div style="background:#000; border-radius:10px; padding:32px; text-align:center; margin-bottom:16px;">
+        <div style="font-size:32px; margin-bottom:16px;">✉️</div>
+        <div style="font-size:11px; font-weight:700; color:#555; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px;">Get in Touch</div>
+        <div style="font-size:22px; font-weight:800; color:#fff; margin-bottom:8px;">Agency Revolution Team</div>
+        <div style="font-size:14px; color:#555; margin-bottom:24px; line-height:1.6;">Have a question, need an update, or want to flag something? Reach out directly and we'll get back to you.</div>
+        <a href="mailto:team@agencyrevolution.com?subject=First MainStreet Insurance — Dashboard Inquiry" style="display:inline-flex; align-items:center; gap:8px; background:#E9A226; color:#000; font-size:14px; font-weight:800; padding:14px 28px; border-radius:8px; text-decoration:none; letter-spacing:0.2px;">Email Our Team ↗</a>
+        <div style="margin-top:16px; font-size:12px; color:#444;">team@agencyrevolution.com</div>
+      </div>
+
+      <div style="background:#fff; border-radius:10px; padding:20px 24px;">
+        <div style="font-size:11px; font-weight:700; color:#878787; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:14px;">What to include in your email</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="width:22px; height:22px; border-radius:50%; background:#E9A226; color:#000; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">1</div>
+            <div style="font-size:13px; color:#333; line-height:1.5;"><strong style="color:#000;">Your name</strong> — so we know who we're responding to</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="width:22px; height:22px; border-radius:50%; background:#E9A226; color:#000; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">2</div>
+            <div style="font-size:13px; color:#333; line-height:1.5;"><strong style="color:#000;">Topic</strong> — e.g. Action Item, Pre-Renewal Campaign, Meeting Notes, General Question</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="width:22px; height:22px; border-radius:50%; background:#E9A226; color:#000; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">3</div>
+            <div style="font-size:13px; color:#333; line-height:1.5;"><strong style="color:#000;">Your message</strong> — as much detail as helpful</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /contact -->
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<div class="ft">
+  <div class="ft-l">Confidential — For FMSI Stakeholders Only &nbsp;·&nbsp; <span class="ft-o">Agency Revolution</span></div>
+</div>
+
+<script>
+  function showBottomPanel(panelId, tileId) {
+    const panels = ['panel-doc','panel-checklist','panel-actions','panel-nextsteps'];
+    const tiles  = ['tile-doc','tile-checklist','tile-actions','tile-nextsteps'];
+    const clicked = document.getElementById(panelId);
+    const isOpen  = clicked.classList.contains('open');
+    panels.forEach(id => { const p = document.getElementById(id); if(p){ p.classList.remove('open'); p.style.display='none'; }});
+    tiles.forEach(id  => { const t = document.getElementById(id);  if(t) t.classList.remove('active'); });
+    if (!isOpen) {
+      clicked.classList.add('open');
+      clicked.style.display = 'block';
+      document.getElementById(tileId).classList.add('active');
+    }
+  }
+  function go(id, el) {
+    document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('pg-' + id).classList.add('on');
+    if (el) el.classList.add('on');
+  }
+  function toggleClosed(btn) {
+    const drawer = btn.nextElementSibling;
+    const open = drawer.classList.toggle('open');
+    btn.querySelector('.toggle-arrow').textContent = open ? '▾' : '▸';
+  }
+  function toggleMN(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contact-modal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Contact Agency Revolution</div>
+      <button class="modal-close" onclick="document.getElementById('contact-modal').style.display='none'">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#FFF9EC; border:1px solid #F5DFA0; border-radius:6px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:#7a5800; line-height:1.6;">
+        Use this form to request a new action item, flag a change, or ask a general question. Our team will follow up with you directly.
+      </div>
+
+      <!-- QUICK REPLY BUTTONS -->
+      <div style="margin-bottom:16px;">
+        <div style="font-size:10px; font-weight:700; color:#878787; letter-spacing:1.1px; text-transform:uppercase; margin-bottom:8px;">Quick Replies</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button onclick="quickReplyActionItem()" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Request Action Item Update</button>
+          <button onclick="quickReplyProject()" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Flag a Project Change</button>
+          <button onclick="quickReply('General Question', 'Hi team, I have a question I\'d like some clarification on:\n\n[Describe your question here]')" style="background:#fff; border:1px solid #e0e0e0; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; color:#333; cursor:pointer;">Ask a Question</button>
+        </div>
+      </div>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="cf-name" type="text" placeholder="Jane Doe">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Email</label>
+          <input class="modal-input" id="cf-email" type="email" placeholder="you@firstmainstreet.com">
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Topic</label>
+        <select class="modal-select" id="cf-topic" onchange="updateMessagePlaceholder()">
+          <option value="" disabled selected>Select a topic...</option>
+          <option value="Action Item">Action Item</option>
+          <option value="Project">Project</option>
+          <option value="General Question">General Question</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Message</label>
+        <textarea class="modal-textarea" id="cf-message" placeholder="Select a topic above or type your message here..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="document.getElementById('contact-modal').style.display='none'">Cancel</button>
+      <button class="modal-btn-submit" onclick="submitContactForm()">Send Message ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const placeholders = {
+    'Action Item': 'e.g. Please mark Writebacks as Closed, update the next steps for List of Terms, or add a new action item for...',
+    'Project': 'e.g. The Pre-Renewal Campaign go-live date has shifted, or I have feedback on the campaign structure...',
+    'General Question': 'e.g. Can you clarify what the current status of the testing audience means, or when our next Monday call is?'
+  };
+
+  function updateMessagePlaceholder() {
+    const topic = document.getElementById('cf-topic').value;
+    const msg = document.getElementById('cf-message');
+    msg.placeholder = placeholders[topic] || 'Select a topic above or type your message here...';
+  }
+
+  function quickReply(topic, message) {
+    document.getElementById('cf-topic').value = topic;
+    document.getElementById('cf-message').value = message;
+    document.getElementById('cf-message').placeholder = placeholders[topic] || '';
+    document.getElementById('cf-name').focus();
+  }
+
+  function quickReplyActionItem() {
+    document.getElementById('cf-topic').value = 'Action Item';
+    document.getElementById('cf-message').value = 'Item: [item name]\nRequested change: [e.g. mark as Closed, update next steps, add a new item]';
+    updateMessagePlaceholder();
+    document.getElementById('cf-name').focus();
+  }
+
+  function quickReplyProject() {
+    document.getElementById('cf-topic').value = 'Project';
+    document.getElementById('cf-message').value = 'I have an update regarding [project name].\n\n[Please describe the update or change needed]';
+    updateMessagePlaceholder();
+    document.getElementById('cf-name').focus();
+  }
+
+  function quickReplyQuestion() {
+    document.getElementById('cf-topic').value = 'General Question';
+    document.getElementById('cf-message').value = 'Hi team, I have a question I\'d like some clarification on:\n\n[Describe your question here]';
+    updateMessagePlaceholder();
+    document.getElementById('cf-name').focus();
+  }
+
+  function submitContactForm() {
+    const name    = document.getElementById('cf-name').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const topic   = document.getElementById('cf-topic').value;
+    const message = document.getElementById('cf-message').value.trim();
+    if (!name || !email || !topic || !message) {
+      alert('Please fill in all fields before sending.');
+      return;
+    }
+    const subject = encodeURIComponent('FMSI Dashboard — ' + topic);
+    const body    = encodeURIComponent(
+      'From: ' + name + ' (' + email + ')' +
+      '\n\nTopic: ' + topic +
+      '\n\nMessage:\n' + message
+    );
+    window.location.href = 'mailto:team@agencyrevolution.com?subject=' + subject + '&body=' + body;
+    document.getElementById('contact-modal').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
