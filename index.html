@@ -530,14 +530,29 @@
               <div class="ip-thc">Owner</div>
             </div>
             <div class="ip-tr">
-              <div class="ip-td-main">FMSI feedback on Pre-Renewal Campaign doc</div>
-              <div><div class="badge b-cls">Closed</div></div>
-              <div class="ip-td-owner">FMSI</div>
-            </div>
-            <div class="ip-tr">
               <div class="ip-td-main">Getting Feedback on Test Cases</div>
               <div><div class="badge b-ip">In Progress</div></div>
               <div class="ip-td-owner">FMG/AR</div>
+            </div>
+          </div>
+
+          <!-- CLOSED ACTION ITEMS -->
+          <div class="closed-toggle" onclick="toggleClosed(this)" style="margin-top:12px;">
+            <span class="toggle-arrow">▸</span>
+            <span>Show closed items (1)</span>
+          </div>
+          <div class="closed-drawer">
+            <div class="ip-table" style="margin-top:8px;">
+              <div class="ip-thr">
+                <div class="ip-thc">Item</div>
+                <div class="ip-thc">Status</div>
+                <div class="ip-thc">Owner</div>
+              </div>
+              <div class="ip-tr">
+                <div class="ip-td-main">FMSI feedback on Pre-Renewal Campaign doc</div>
+                <div><div class="badge b-cls">Closed</div></div>
+                <div class="ip-td-owner">FMSI</div>
+              </div>
             </div>
           </div>
         </div>
@@ -554,6 +569,55 @@
           </div>
         </div>
 
+        </div>
+
+      </div>
+
+    </div>
+
+  </div><!-- /projects -->
+
+
+  <!-- ══════════ MEETING NOTES ══════════ -->
+  <div class="pg" id="pg-notes">
+
+    <div class="mn-intro">All meeting notes from September 2025 to present. Click any row to expand the full recap.</div>
+
+    <div class="mn-list">
+
+      <div class="mn-card" id="m-jul13">
+        <div class="mn-hd" onclick="toggleMN('m-jul13')">
+          <div class="mn-date">July 13, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Campaign Strategy and Configuration</strong> — Reviewed all campaigns and confirmed the current set up is correct, however, the emails will now be going based off the 'next renewal date' trigger rather than the 'policy expiration date'. The segments for both pre and post renewal personal campaigns were reverted to their original audiences.<br><br>
+            <strong>System Logic and Definitions</strong> — Annualized premium established as primary anchor for highest premium calculation. Location collapsing in Fuse deemed unnecessary; internal data cleanup in Epic prioritized instead. Definitions section will be established on dashboard to maintain consistency for future campaigns.<br><br>
+            <strong>Agency Categories Question</strong> — You are able to segment based on specific categories to create segments for campaigns, and you can also exclude those you won't want targeted.<br><br>
+            <strong>Policy Status Code Mappings</strong> — Current line status code mappings were shared via email to FMSI, however, further clarification is needed to provide current mappings.<br><br>
+            <strong>Testing and Go-Live Timeline</strong> — Go-live target set for August 10. Beta testing cycle projected for July 27 or August 3. Agency Revolution will review the test cases against best practices. Once this has been reviewed, we will connect to schedule another call this week.
+          </div>
+        </div>
+      </div>
+
+      <div class="mn-card" id="m-jul9">
+        <div class="mn-hd" onclick="toggleMN('m-jul9')">
+          <div class="mn-date">July 9, 2026 — Meeting Notes</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-text">
+            <strong>Campaign Tweaks</strong> — Two tweaks need to be made to the existing campaigns. Nathan will review the document and make the necessary adjustments based on the discussion.<br><br>
+            <strong>Data Dictionary</strong> — There's a data dictionary section where FMSI will add items they need defined, and our team will take a look.<br><br>
+            <strong>Requirements Document</strong> — If they have requirements, do they want to track them in a requirements document? This could be a section in the Dashboard.<br><br>
+            <strong>Test Case List</strong> — Jason will send us a test case list for our team to review. Ideally, in the future, FMSI will develop client-facing test cases. This list will include tests they want to perform (e.g., multiple branches) to ensure everything works as expected. It's essentially a checklist to ensure things are functioning correctly, creating testing audiences, and monitoring them.<br><br>
+            <strong>Criteria Page</strong> — There should be a criteria page (like a go-live checklist) before launching campaigns, outlining expected outcomes.<br><br>
+            <strong>Campaign Targeting</strong> — Targeting campaigns with a specific set of clients to review if the criteria are in place. FMSI will ensure clients meet the criteria, so they have accounts that match the campaign criteria.<br><br>
+            <strong>Example Test Cases</strong> — FMSI will send over example test cases for our team's thoughts on the best approach.<br><br>
+            <strong>Overall</strong> — FMSI will provide information to be added to the document. They don't appear to want to add to the document themselves, so we'll have ownership. Having a dashboard where they don't have full editable access makes sense. FMSI will work on the data dictionary for terms they want defined.
+          </div>
+        </div>
       </div>
 
       <div class="mn-card" id="m-apr13">
