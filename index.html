@@ -443,12 +443,12 @@
           <div class="prog-line now"></div>
           <div class="prog-step">
             <div class="prog-dot now"></div>
-            <div class="prog-step-lbl now">Testing Audience</div>
+            <div class="prog-step-lbl now">Internal Testing</div>
           </div>
           <div class="prog-line later"></div>
           <div class="prog-step">
             <div class="prog-dot later"></div>
-            <div class="prog-step-lbl later">Final Requirements</div>
+            <div class="prog-step-lbl later">Beta Agency Testing</div>
           </div>
           <div class="prog-line later"></div>
           <div class="prog-step">
@@ -497,15 +497,6 @@
             <div class="res-arrow">▾</div>
           </div>
 
-          <div class="res-link" id="tile-timeline" onclick="showBottomPanel('panel-timeline','tile-timeline')">
-            <div class="res-icon ri-o">📅</div>
-            <div class="res-text">
-              <div class="res-title">Testing Timeline</div>
-              <div class="res-desc">Key dates and testing phases</div>
-            </div>
-            <div class="res-arrow">▾</div>
-          </div>
-
         </div>
 
         <!-- PRE-RENEWAL DOC PANEL -->
@@ -523,8 +514,8 @@
             <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">Business segments confirmed per account, per policy location</div></div>
             <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">FMSI feedback received on Pre-Renewal Campaign doc</div></div>
             <div class="ip-item"><div class="ip-dot done">✓</div><div class="ip-text strikethrough">Align on test cases with FMSI</div></div>
-            <div class="ip-item"><div class="ip-dot now">→</div><div class="ip-text">Receive 19 test accounts from FMSI for beta testing</div></div>
-            <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Final campaign requirements finalized</div></div>
+            <div class="ip-item"><div class="ip-dot now">→</div><div class="ip-text">Internal Testing (July 21–27)</div></div>
+            <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Beta Agency Testing (July 28)</div></div>
             <div class="ip-item"><div class="ip-dot todo"></div><div class="ip-text muted">Go-Live — August 10, 2026</div></div>
           </div>
         </div>
@@ -539,16 +530,16 @@
               <div class="ip-thc">Owner</div>
             </div>
             <div class="ip-tr">
-              <div class="ip-td-main">Receive 19 test accounts for beta campaigns</div>
+              <div class="ip-td-main">Conduct internal testing (July 21–27)</div>
               <div><div class="badge b-ip">In Progress</div></div>
-              <div class="ip-td-owner">FMSI</div>
+              <div class="ip-td-owner">FMG/AR</div>
             </div>
           </div>
 
           <!-- CLOSED ACTION ITEMS -->
           <div class="closed-toggle" onclick="toggleClosed(this)" style="margin-top:12px;">
             <span class="toggle-arrow">▸</span>
-            <span>Show closed items (2)</span>
+            <span>Show closed items (3)</span>
           </div>
           <div class="closed-drawer">
             <div class="ip-table" style="margin-top:8px;">
@@ -556,6 +547,11 @@
                 <div class="ip-thc">Item</div>
                 <div class="ip-thc">Status</div>
                 <div class="ip-thc">Owner</div>
+              </div>
+              <div class="ip-tr">
+                <div class="ip-td-main">Receive 19 test accounts from FMSI</div>
+                <div><div class="badge b-cls">Closed</div></div>
+                <div class="ip-td-owner">FMSI</div>
               </div>
               <div class="ip-tr">
                 <div class="ip-td-main">Getting Feedback on Test Cases</div>
@@ -577,51 +573,26 @@
           <div class="ip-ns-item">
             <div class="ip-ns-num">1</div>
             <div class="ip-ns-body">
-              <div class="ip-ns-main">Receive 19 test accounts from FMSI</div>
-              <div class="ip-ns-detail">FMSI will provide the list of 19 test accounts to be used for beta testing across the Commercial, Farm, and Personal campaigns.</div>
+              <div class="ip-ns-main">Internal Testing (July 21–27)</div>
+              <div class="ip-ns-detail">Send data to Outbox for the three campaigns (Commercial, Farm, Personal), review results, and delete test data. This validates the campaign setup before agency testing.</div>
             </div>
           </div>
           <div class="ip-ns-item">
             <div class="ip-ns-num">2</div>
             <div class="ip-ns-body">
-              <div class="ip-ns-main">Tag and input test accounts into beta campaigns</div>
-              <div class="ip-ns-detail">Once the 19 accounts are received, we will tag them and input them into the three beta campaigns (Commercial, Farm, and Personal) that have been created.</div>
+              <div class="ip-ns-main">Beta Agency Testing (July 28)</div>
+              <div class="ip-ns-detail">Send data for select agencies to Outbox, review, and deploy to clients. Limited rollout with hand-selected accounts to validate production readiness.</div>
             </div>
           </div>
           <div class="ip-ns-item">
             <div class="ip-ns-num">3</div>
             <div class="ip-ns-body">
-              <div class="ip-ns-main">Launch beta with Outbox enabled and begin testing</div>
-              <div class="ip-ns-detail">Enable the Outbox for the three beta campaigns and initiate the testing process to validate functionality and results.</div>
+              <div class="ip-ns-main">Full Agency Launch (August 10)</div>
+              <div class="ip-ns-detail">Send data to Outbox, review, and deploy to all clients. Determine timeline for ongoing Outbox monitoring on full go-live.</div>
             </div>
           </div>
         </div>
 
-        <!-- TESTING TIMELINE PANEL -->
-        <div class="inline-panel" id="panel-timeline">
-          <div class="ip-title">Testing Timeline</div>
-          <div class="ip-ns-item">
-            <div class="ip-ns-num">1</div>
-            <div class="ip-ns-body">
-              <div class="ip-ns-main">July 21–27 | Internal Testing</div>
-              <div class="ip-ns-detail">Send data to Outbox, review, and delete. This phase allows AR to test and validate before moving to agency testing.</div>
-            </div>
-          </div>
-          <div class="ip-ns-item">
-            <div class="ip-ns-num">2</div>
-            <div class="ip-ns-body">
-              <div class="ip-ns-main">July 28 | Beta Agency Testing</div>
-              <div class="ip-ns-detail">Send data for select agencies to Outbox, review, and deploy to clients. Limited rollout with hand-selected accounts.</div>
-            </div>
-          </div>
-          <div class="ip-ns-item">
-            <div class="ip-ns-num">3</div>
-            <div class="ip-ns-body">
-              <div class="ip-ns-main">August 10 | Full Agency Launch</div>
-              <div class="ip-ns-detail">Start by sending data to Outbox, review (as best we can), and deploy to clients. Determine timeline for Outbox on full go-live.</div>
-            </div>
-          </div>
-        </div>
 
         </div>
 
@@ -1061,8 +1032,8 @@
 
 <script>
   function showBottomPanel(panelId, tileId) {
-    const panels = ['panel-doc','panel-checklist','panel-actions','panel-nextsteps','panel-timeline'];
-    const tiles  = ['tile-doc','tile-checklist','tile-actions','tile-nextsteps','tile-timeline'];
+    const panels = ['panel-doc','panel-checklist','panel-actions','panel-nextsteps'];
+    const tiles  = ['tile-doc','tile-checklist','tile-actions','tile-nextsteps'];
     const clicked = document.getElementById(panelId);
     const isOpen  = clicked.classList.contains('open');
     panels.forEach(id => { const p = document.getElementById(id); if(p){ p.classList.remove('open'); p.style.display='none'; }});
