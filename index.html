@@ -497,6 +497,15 @@
             <div class="res-arrow">▾</div>
           </div>
 
+          <div class="res-link" id="tile-timeline" onclick="showBottomPanel('panel-timeline','tile-timeline')">
+            <div class="res-icon ri-o">📅</div>
+            <div class="res-text">
+              <div class="res-title">Testing Timeline</div>
+              <div class="res-desc">Key dates and testing phases</div>
+            </div>
+            <div class="res-arrow">▾</div>
+          </div>
+
         </div>
 
         <!-- PRE-RENEWAL DOC PANEL -->
@@ -584,6 +593,32 @@
             <div class="ip-ns-body">
               <div class="ip-ns-main">Launch beta with Outbox enabled and begin testing</div>
               <div class="ip-ns-detail">Enable the Outbox for the three beta campaigns and initiate the testing process to validate functionality and results.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TESTING TIMELINE PANEL -->
+        <div class="inline-panel" id="panel-timeline">
+          <div class="ip-title">Testing Timeline</div>
+          <div class="ip-ns-item">
+            <div class="ip-ns-num">1</div>
+            <div class="ip-ns-body">
+              <div class="ip-ns-main">July 21–27 | Internal Testing</div>
+              <div class="ip-ns-detail">Send data to Outbox, review, and delete. This phase allows AR to test and validate before moving to agency testing.</div>
+            </div>
+          </div>
+          <div class="ip-ns-item">
+            <div class="ip-ns-num">2</div>
+            <div class="ip-ns-body">
+              <div class="ip-ns-main">July 28 | Beta Agency Testing</div>
+              <div class="ip-ns-detail">Send data for select agencies to Outbox, review, and deploy to clients. Limited rollout with hand-selected accounts.</div>
+            </div>
+          </div>
+          <div class="ip-ns-item">
+            <div class="ip-ns-num">3</div>
+            <div class="ip-ns-body">
+              <div class="ip-ns-main">August 10 | Full Agency Launch</div>
+              <div class="ip-ns-detail">Start by sending data to Outbox, review (as best we can), and deploy to clients. Determine timeline for Outbox on full go-live.</div>
             </div>
           </div>
         </div>
@@ -1026,8 +1061,8 @@
 
 <script>
   function showBottomPanel(panelId, tileId) {
-    const panels = ['panel-doc','panel-checklist','panel-actions','panel-nextsteps'];
-    const tiles  = ['tile-doc','tile-checklist','tile-actions','tile-nextsteps'];
+    const panels = ['panel-doc','panel-checklist','panel-actions','panel-nextsteps','panel-timeline'];
+    const tiles  = ['tile-doc','tile-checklist','tile-actions','tile-nextsteps','tile-timeline'];
     const clicked = document.getElementById(panelId);
     const isOpen  = clicked.classList.contains('open');
     panels.forEach(id => { const p = document.getElementById(id); if(p){ p.classList.remove('open'); p.style.display='none'; }});
