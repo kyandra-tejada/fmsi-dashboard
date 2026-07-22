@@ -269,12 +269,12 @@
     <div class="stats">
       <div class="stat">
         <div class="stat-label">Active Items</div>
-        <div class="stat-val">6</div>
+        <div class="stat-val">5</div>
         <div class="stat-sub">Open across the account</div>
       </div>
       <div class="stat g">
         <div class="stat-label">Closed Items</div>
-        <div class="stat-val">6</div>
+        <div class="stat-val">7</div>
         <div class="stat-sub">Resolved to date</div>
       </div>
     </div>
@@ -292,7 +292,7 @@
 
     <!-- ACTIVE ITEMS -->
     <div style="margin-bottom:28px;">
-      <div class="sh"><div class="sh-bar"></div><div class="sh-title">Active Items</div><div class="sh-aside">6 open</div></div>
+      <div class="sh"><div class="sh-bar"></div><div class="sh-title">Active Items</div><div class="sh-aside">5 open</div></div>
       <div class="tbl">
         <div class="tbl-head">
           <div class="tbl-hc">Item</div>
@@ -330,13 +330,6 @@
         </div>
 
         <div class="tbl-row">
-          <div><div class="row-name">Blacklisted Contact Cleanup</div><div class="row-type">Technical</div></div>
-          <div><div class="badge b-ip">In Progress</div></div>
-          <div><div class="pri p-md">Medium</div></div>
-          <div class="row-ns">Engineering ticket submitted. Update to be shared once resolved.</div>
-        </div>
-
-        <div class="tbl-row">
           <div><div class="row-name">Check-In Meetings</div><div class="row-type">Process</div></div>
           <div><div class="badge b-ip">In Progress</div></div>
           <div><div class="pri p-md">Medium</div></div>
@@ -347,7 +340,7 @@
       <!-- CLOSED ITEMS -->
       <div class="closed-toggle" onclick="toggleClosed(this)">
         <span class="toggle-arrow">▸</span>
-        <span>Show closed items (6)</span>
+        <span>Show closed items (7)</span>
       </div>
       <div class="closed-drawer">
         <div class="tbl">
@@ -392,6 +385,12 @@
             <div><div class="badge b-cls">Closed</div></div>
             <div><div class="pri p-md">Medium</div></div>
             <div class="row-ns">Policies now displayed in chronological order.</div>
+          </div>
+          <div class="tbl-row">
+            <div><div class="row-name">Blacklisted Contact Cleanup</div></div>
+            <div><div class="badge b-cls">Closed</div></div>
+            <div><div class="pri p-md">Medium</div></div>
+            <div class="row-ns">Engineering ticket resolved. Blacklisted contacts cleaned up.</div>
           </div>
         </div>
       </div>
@@ -619,7 +618,7 @@
             <strong>Data Validation</strong> — Joshua Connell's account correctly triggered 2 email subscriptions (one per policy branch) with expected send dates of July 22, 2026 and June 30, 2027. Sheila Counle's account was excluded due to missing primary email address in Epic data—system correctly excluded the account (proper data validation, not a failure).<br><br>
             <strong>Testing & Verification</strong> — Kaleb tested 24 accounts total. Duplicate entries identified and filtered out. Edge cases successfully identified and validated.<br><br>
             <strong>Internal Testing Complete</strong> — All checks passed. Continuing testing through the week with final sign-off on Monday. Beta agency testing will begin upon approval.
-            <a href="#" onclick="alert('Outbox Review PDF would open here'); return false;" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#E9A226; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; font-size:12px;">Open Outbox Review</a>
+            <a href="https://raw.githubusercontent.com/kyandra-tejada/fmsi-dashboard/main/_AR__FMSI_-_Outbox_Review.pdf" target="_blank" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#E9A226; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; font-size:12px;">Open Outbox Review</a>
           </div>
         </div>
       </div>
@@ -633,7 +632,7 @@
           <div class="mn-text">
             <strong>Action Items Reviewed</strong> — Campaign setup items confirmed. Test accounts received and tagged, accounts added to beta campaign segments, and fallback user strategy confirmed. FMSI will finalize discussion on their default user email address (info@ setup).<br><br>
             <strong>Email Sending Setup</strong> — Email sender hierarchy established: RMA, RMP, PAM, then Default user (if all above are blank). All segments confirmed as properly configured and ready for launch.<br><br>
-            <a href="#" onclick="alert('Campaign Check List PDF would open here'); return false;" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#E9A226; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; font-size:12px;">Open Campaign Check List</a>
+            <a href="https://raw.githubusercontent.com/kyandra-tejada/fmsi-dashboard/main/_AR__FMSI___Pre-Renewal__Campaign_Check_List.pdf" target="_blank" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#E9A226; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; font-size:12px;">Open Campaign Check List</a>
           </div>
         </div>
       </div>
